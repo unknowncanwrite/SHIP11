@@ -21,11 +21,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method === 'POST') {
       const data = req.body;
       const now = Date.now();
+
+      // Default values for required JSON fields
+      const defaultDetails = {
+        customer: '', consignee: '', location: '', shippingLine: '',
+        brand: '', inspectionDate: '', eta: '', loadingDate: '',
+        idf: '', seal: '', ucr: '', proforma: '', commercialInv: '',
+        container: '', booking: ''
+      };
+
+      const defaultCommercial = { invoice: '', qty: '', netWeight: '', grossWeight: '' };
+      const defaultActual = { invoice: '', qty: '', netWeight: '', grossWeight: '', invoiceSent: false };
+
       const newShipment = {
         ...data,
         createdAt: data.createdAt ?? now,
         lastUpdated: data.lastUpdated ?? now,
-        // Ensure required JSON fields have default values
+        // Ensure all required JSON fields have default values
+        details: data.details ?? defaultDetails,
+        commercial: data.commercial ?? defaultCommercial,
+        actual: data.actual ?? defaultActual,
         customTasks: data.customTasks ?? [],
         documents: data.documents ?? [],
         checklist: data.checklist ?? {},
