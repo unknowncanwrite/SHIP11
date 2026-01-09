@@ -25,6 +25,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         ...data,
         createdAt: data.createdAt ?? now,
         lastUpdated: data.lastUpdated ?? now,
+        // Ensure required JSON fields have default values
+        customTasks: data.customTasks ?? [],
+        documents: data.documents ?? [],
+        checklist: data.checklist ?? {},
+        shipmentChecklist: data.shipmentChecklist ?? [],
       };
 
       const [inserted] = await db.insert(shipments).values(newShipment).returning();
